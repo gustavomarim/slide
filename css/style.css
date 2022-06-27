@@ -18,8 +18,12 @@ img {
 }
 
 .slide {
-  display: flex;
+  display   : flex;
   transition: .3s;
+}
+
+.slide:hove {
+  will-change: transform;
 }
 
 .slide li {
@@ -27,8 +31,16 @@ img {
   width      : 80vw;
   max-width  : 800px;
   margin     : 0 20px;
+
+  border-radius: 4px;
+  overflow     : hidden;
+  box-shadow   : 0 2px 4px rgba(0, 0, 0, .4);
+  opacity      : 8;
+  transform    : scale(.8);
+  transition   : .4s;
 }
 
-/* .slide {
-  transform: translate3d(-3246.5px, 0px, 0px);
-} */
+.slide li.active {
+  opacity  : 1;
+  transform: scale(1);
+}
