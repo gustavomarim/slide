@@ -3,7 +3,9 @@ export default class Slide {
     this.slide = document.querySelector(slide);
     this.wrapper = document.querySelector(wrapper);
 
-    // obj: referência dos numeros
+    // objeto contendo as referências dos valores 
+    // dinâmicos das posições de clique e movimento
+    // no eixo x da imagem.
     this.dist = { finalPosition: 0, startX: 0, movement: 0 }
   }
 
@@ -18,24 +20,39 @@ export default class Slide {
   }
 
   onStart(event) {
-    event.preventDefault();
-    this.dist.startX = event.clientX;
-    this.wrapper.addEventListener("mousemove", this.onMove);
+    let moveType;
+
+    // evento de clique
+    if (event.type === "mousedown") {
+      event.preventDefault();
+      this.dist.startX = event.clientX;
+      moveType = "mousemove";
+    } else {
+      // evento de toque
+      moveType = "touchmove";
+      this.dist.startX = event.changedTouches[0].clientX;
+    }
+
+    this.wrapper.addEventListener(moveType, this.onMove);
   }
 
   onMove(event) {
-    const finalPosition = this.updatePosition(event.clientX);
+    const pointerPosition = (event.type === "mousemove") ? event.clientX : event.changedTouches[0].clientX;
+    const finalPosition = this.updatePosition(pointerPosition);
     this.moveSlide(finalPosition);
   }
 
   onEnd(event) {
-    this.wrapper.removeEventListener("mousemove", this.onMove);
+    const moveType = (event.type === "mouseup") ? "mousemove" : "touchmove";
+    this.wrapper.removeEventListener(moveType, this.onMove);
     this.dist.finalPosition = this.dist.movePosition;
   }
 
   addSlideEvents() {
     this.wrapper.addEventListener("mousedown", this.onStart);
+    this.wrapper.addEventListener("touchstart", this.onStart);
     this.wrapper.addEventListener("mouseup", this.onEnd);
+    this.wrapper.addEventListener("touchend", this.onEnd);
   }
 
   // Classe para bind de eventos
