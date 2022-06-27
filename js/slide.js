@@ -4,7 +4,12 @@ export default class Slide {
   constructor(slide, wrapper) {
     this.slide = document.querySelector(slide)
     this.wrapper = document.querySelector(wrapper);
+
+    // objeto contendo as referências dos valores 
+    // dinâmicos das posições de clique e movimento
+    // no eixo x da imagem.
     this.dist = { finalPosition: 0, startX: 0, movement: 0 }
+
     this.activeClass = 'active';
   }
 
@@ -24,6 +29,8 @@ export default class Slide {
 
   onStart(event) {
     let movetype;
+
+    // evento de clique
     if (event.type === 'mousedown') {
       event.preventDefault();
       this.dist.startX = event.clientX;
@@ -32,6 +39,7 @@ export default class Slide {
       this.dist.startX = event.changedTouches[0].clientX;
       movetype = 'touchmove';
     }
+
     this.wrapper.addEventListener(movetype, this.onMove);
     this.transition(false);
   }
